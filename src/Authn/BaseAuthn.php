@@ -9,12 +9,8 @@ use Illuminate\Support\Facades\RateLimiter;
 
 abstract class BaseAuthn implements IAuthn
 {
-    public function __construct(
-        protected AuthUserDto $authUserDto
-    )
-    {}
-
     abstract public function authenticate(AuthnPayload $payload): AuthnResult;
+    abstract public function refresh(AuthnPayload $payload): AuthnResult;
 
     public function clearRateLimitingAttempts(): void
     {

@@ -14,7 +14,7 @@ use Obman\LaravelApiAuthClient\Enums\ClientType;
 
 class AuthnFactory
 {
-    private static function tryDetectingType()
+    protected static function tryDetectingType()
     {
         if (class_exists(\Laravel\Sanctum\Sanctum::class)) {
             return ClientType::SANCTUM;
@@ -31,7 +31,7 @@ class AuthnFactory
         return null;
     }
 
-    public static function make(AuthnType $type, AuthUserDto $authUserDto, ?ClientType $clientType = null): IAuthn
+    public static function make(AuthnType $type, ?ClientType $clientType = null): IAuthn
     {
         $clientType ??= self::tryDetectingType();
 
@@ -41,15 +41,15 @@ class AuthnFactory
 
         return match ($clientType) {
             ClientType::JWT => match ($type) {
-                AuthnType::BASIC => new JwtBasic($authUserDto),
+                AuthnType::BASIC => new JwtBasic(),
             },
             ClientType::SANCTUM => match ($type) {
-                AuthnType::BASIC => new SanctumBasic($authUserDto),
-                AuthnType::TWO_FACTOR => new TwoFA($authUserDto),
-                AuthnType::CERTIFICATE => new Cert($authUserDto)
+                AuthnType::BASIC => new SanctumBasic(),
+                AuthnType::TWO_FACTOR => new TwoFA(),
+                AuthnType::CERTIFICATE => new Cert()
             },
             ClientType::PASSPORT => match ($type) {
-                AuthnType::BASIC => new PassportBasic($authUserDto)
+                AuthnType::BASIC => new PassportBasic()
             },
         };
     }

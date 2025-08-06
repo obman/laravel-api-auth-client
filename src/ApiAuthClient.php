@@ -14,20 +14,26 @@ class ApiAuthClient
 {
     private IAuthn $authn;
 
-    public function __construct(AuthnType $authnType, array $credentials, ?ClientType $clientType = null)
+    public function __construct(AuthnType $authnType, ?ClientType $clientType = null)
     {
-        $dto = new AuthUserDto($credentials['email'], $credentials['password'], $credentials['remember_me'] ?? false);
-        $this->authn = AuthnFactory::make($authnType, $dto, $clientType);
+        $this->authn = AuthnFactory::make($authnType, $clientType);
     }
 
-    public function getAuthnPayload(array $tokens, bool $returnUser): AuthnPayload
+    protected function getAuthnPayload(array $tokens, ?array $credentials = []): AuthnPayload
     {
-        return new AuthnPayload($returnUser, $tokens);
+        $dto = !empty($credentials) ? new AuthUserDto($credentials) : null;
+        return new AuthnPayload($tokens, $dto);
     }
 
-    public function authenticate(array $tokens = [], bool $returnUser = true): AuthnResult
+    public function authenticate(array $tokens = [], ?array $credentials = []): AuthnResult
     {
-        $payload = $this->getAuthnPayload($tokens, $returnUser);
+        $payload = $this->getAuthnPayload($tokens, $credentials);
         return $this->authn->authenticate($payload);
+    }
+
+    public function refresh(array $tokens = [], ?array $credentials = []): AuthnResult
+    {
+        $payload = $this->getAuthnPayload($tokens, $credentials);
+        return $this->authn->refresh($payload);
     }
 }
