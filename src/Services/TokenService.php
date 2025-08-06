@@ -17,7 +17,7 @@ class TokenService
     private CookieGenerator $cookieGenerator;
 
     public function __construct(
-        private Authenticatable $user
+        private ?Authenticatable $user
     )
     {
         $this->config = config('apiauthclient');
@@ -37,30 +37,38 @@ class TokenService
     public function getRefreshCookieToken(?string $token = null): Cookie
     {
         $refreshTokenConf = $this->config['token']['refresh'];
-        $settings = new TokenSettings($refreshTokenConf['label'], $refreshTokenConf['expiration']);
-        $tokenName = $settings->label . $this->user->email;
-        $tokenExpiration = now()->addMinutes($settings->expiration);
-        $abilities = [TokenType::REFRESH_TOKEN];
-        if (!empty($token)) {
+        $tokenSettings = new TokenSettings($refreshTokenConf['label'], $refreshTokenConf['expiration']);
+
+        if ($token !== null) {
             $cookieToken = $token;
-        } else {
+        } elseif ($this->user !== null) {
+            $tokenName = $tokenSettings->label . $this->user->email;
+            $tokenExpiration = now()->addMinutes($tokenSettings->expiration);
+            $abilities = [TokenType::REFRESH_TOKEN];
             $cookieToken = $this->tokenGenerator->generate($this->user, $tokenName, $tokenExpiration, $abilities);
+        } else {
+            throw new \InvalidArgumentException('Either user or token must be provided to generate refresh cookie token.');
         }
+
         $cookieConf = $this->config['cookie'];
-        $path = $cookieConf['path'];
-        $domain = $cookieConf['domain'];
-        return $this->cookieGenerator->generate($settings->label, $cookieToken, $settings->expiration, $path, $domain, false);
+        return $this->cookieGenerator->generate(
+            $tokenSettings->label,
+            $cookieToken,
+            $tokenSettings->expiration,
+            $cookieConf['path'],
+            $cookieConf['domain'],
+            false
+        );
     }
 
     public function getCsrfCookieToken(): Cookie
     {
         $csrfConfig = $this->config['token']['csrf'];
-        $name = $csrfConfig['label'];
-        $expiration = $csrfConfig['expiration'];
+        $tokenSettings = new TokenSettings($csrfConfig['label'], $csrfConfig['expiration']);
         $token = hash('sha256', Str::random(40));
         $cookieConf = $this->config['cookie'];
         $path = $cookieConf['path'];
         $domain = $cookieConf['domain'];
-        return $this->cookieGenerator->generate($name, $token, $expiration, $path, $domain, false);
+        return $this->cookieGenerator->generate($tokenSettings->label, $token, $tokenSettings->expiration, $path, $domain, false);
     }
 }

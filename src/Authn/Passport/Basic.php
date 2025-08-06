@@ -12,15 +12,19 @@ class Basic extends BaseAuthn
 {
     public function authenticate(AuthnPayload $payload): AuthnResult
     {
-        $user = User::where('email', $this->authUserDto->email)->first();
         $this->clearRateLimitingAttempts();
+        if ($payload->returnUser) {
+            $user = User::where('email', $this->authUserDto->email)->first();
+            $tokenService = new TokenService($user);
+        } else {
+            $tokenService = new TokenService(null);
+        }
 
-        $tokenService = new TokenService($user);
         return new AuthnResult(
             bearer: $payload->tokens['access_token'],
             expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in'])->timestamp,
-            refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
-            csrf: $tokenService->getCsrfCookieToken(),
+            refresh: $tokenService?->getRefreshCookieToken($payload->tokens['refresh_token']),
+            csrf: $tokenService?->getCsrfCookieToken(),
             user: $payload->returnUser ? $user : null
         );
     }
