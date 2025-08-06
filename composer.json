@@ -1,0 +1,22 @@
+{
+    "name": "flydevlabs/api-auth-client",
+    "description": "Laravel package for flexible API authentication",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "FlyDevLabs\\ApiAuthClient\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^12.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FlyDevLabs\\ApiAuthClient\\ApiAuthClientServiceProvider"
+            ]
+        }
+    }
+}
