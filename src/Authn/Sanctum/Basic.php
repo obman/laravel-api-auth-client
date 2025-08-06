@@ -42,6 +42,20 @@ class Basic extends BaseAuthn
 
     public function refresh(AuthnPayload $payload): AuthnResult
     {
-        // TODO: Implement refresh() method.
+        if (empty($payload->user)) {
+            throw new CredentialsMissingException();
+        }
+
+        $this->clearRateLimitingAttempts();
+        $user = User::where('email', $payload->user->email())->first();
+        // TODO: add event for refresh token
+        $tokenService = new TokenService($user);
+        return new AuthnResult(
+            bearer: $tokenService->getAccessToken(),
+            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration'))->timestamp,
+            refresh: $tokenService->getRefreshCookieToken(),
+            csrf: $tokenService->getCsrfCookieToken(),
+            user: null
+        );
     }
 }

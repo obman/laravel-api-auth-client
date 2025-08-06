@@ -19,19 +19,19 @@ class ApiAuthClient
         $this->authn = AuthnFactory::make($authnType, $clientType);
     }
 
-    protected function getAuthnPayload(array $tokens, ?array $credentials = []): AuthnPayload
+    protected function getAuthnPayload(array $tokens, array $credentials = []): AuthnPayload
     {
         $dto = !empty($credentials) ? new AuthUserDto($credentials) : null;
         return new AuthnPayload($tokens, $dto);
     }
 
-    public function authenticate(array $tokens = [], ?array $credentials = []): AuthnResult
+    public function authenticate(array $tokens = [], array $credentials = []): AuthnResult
     {
         $payload = $this->getAuthnPayload($tokens, $credentials);
         return $this->authn->authenticate($payload);
     }
 
-    public function refresh(array $tokens = [], ?array $credentials = []): AuthnResult
+    public function refresh(array $tokens = [], array $credentials = []): AuthnResult
     {
         $payload = $this->getAuthnPayload($tokens, $credentials);
         return $this->authn->refresh($payload);

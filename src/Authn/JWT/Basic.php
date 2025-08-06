@@ -39,8 +39,39 @@ class Basic extends BaseAuthn
         );
     }
 
+    /**
+     * Old/Expired token must be included in $payload
+     * in order to generate new token.
+     * When using api-auth-client refresh method passing
+     * tokens array include token in this format: refresh_token => $value
+     *
+     * @param AuthnPayload $payload
+     * @return AuthnResult
+     * @throws \Exception
+     */
     public function refresh(AuthnPayload $payload): AuthnResult
     {
-        // TODO
+        $oldRefreshToken = $payload->tokens['refresh_token'];
+        $tokenPayload = JWTAuth::setToken($oldRefreshToken)->getPayload();
+        if ($tokenPayload->get('type') !== 'refresh') {
+            throw new \Exception('Invalid token type');
+        }
+
+        $user = JWTAuth::setToken($oldRefreshToken)->toUser();
+        if (!$user) {
+            throw new \Exception('Username not found.');
+        }
+
+        $token = JWTAuth::fromUser($user); // bearer
+        $refreshToken = JWTAuth::customClaims(['type' => 'refresh'])->fromUser($user);
+        $tokenService = new TokenService($user);
+        JWTAuth::setToken($oldRefreshToken)->invalidate();
+        return new AuthnResult(
+            bearer: $token,
+            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration'))->timestamp,
+            refresh: $tokenService->getRefreshCookieToken($refreshToken),
+            csrf: $tokenService->getCsrfCookieToken(),
+            user: null
+        );
     }
 }
