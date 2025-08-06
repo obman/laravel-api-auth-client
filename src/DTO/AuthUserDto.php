@@ -1,6 +1,6 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\DTO;
+namespace Obman\LaravelApiAuthClient\DTO;
 
 readonly class AuthUserDto
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Services;
+namespace Obman\LaravelApiAuthClient\Services;
 
-use FlyDevLabs\ApiAuthClient\DTO\TokenSettings;
-use FlyDevLabs\ApiAuthClient\Enums\TokenType;
-use FlyDevLabs\ApiAuthClient\Generators\CookieGenerator;
-use FlyDevLabs\ApiAuthClient\Generators\TokenGenerator;
+use Obman\LaravelApiAuthClient\DTO\TokenSettings;
+use Obman\LaravelApiAuthClient\Enums\TokenType;
+use Obman\LaravelApiAuthClient\Generators\CookieGenerator;
+use Obman\LaravelApiAuthClient\Generators\TokenGenerator;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Cookie;

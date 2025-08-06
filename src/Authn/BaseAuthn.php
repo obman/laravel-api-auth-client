@@ -1,10 +1,10 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Authn;
+namespace Obman\LaravelApiAuthClient\Authn;
 
-use FlyDevLabs\ApiAuthClient\DTO\AuthnPayload;
-use FlyDevLabs\ApiAuthClient\DTO\AuthnResult;
-use FlyDevLabs\ApiAuthClient\DTO\AuthUserDto;
+use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
+use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
 use Illuminate\Support\Facades\RateLimiter;
 
 abstract class BaseAuthn implements IAuthn

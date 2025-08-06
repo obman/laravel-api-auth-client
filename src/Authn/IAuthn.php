@@ -1,9 +1,9 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Authn;
+namespace Obman\LaravelApiAuthClient\Authn;
 
-use FlyDevLabs\ApiAuthClient\DTO\AuthnPayload;
-use FlyDevLabs\ApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
+use Obman\LaravelApiAuthClient\DTO\AuthnResult;
 use Illuminate\Http\Request;
 
 interface IAuthn

@@ -1,6 +1,6 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\DTO;
+namespace Obman\LaravelApiAuthClient\DTO;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Symfony\Component\HttpFoundation\Cookie;

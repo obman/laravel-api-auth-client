@@ -1,8 +1,8 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Authn\Sanctum;
+namespace Obman\LaravelApiAuthClient\Authn\Sanctum;
 
-use FlyDevLabs\ApiAuthClient\Authn\BaseAuthn;
+use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
 use App\Models\User;
 
 class Cert extends BaseAuthn

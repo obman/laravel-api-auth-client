@@ -1,6 +1,6 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Generators;
+namespace Obman\LaravelApiAuthClient\Generators;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 

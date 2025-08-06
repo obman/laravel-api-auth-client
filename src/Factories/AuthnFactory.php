@@ -1,16 +1,16 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Factories;
+namespace Obman\LaravelApiAuthClient\Factories;
 
-use FlyDevLabs\ApiAuthClient\DTO\AuthUserDto;
-use FlyDevLabs\ApiAuthClient\Authn\IAuthn;
-use FlyDevLabs\ApiAuthClient\Authn\JWT\Basic as JwtBasic;
-use FlyDevLabs\ApiAuthClient\Authn\Passport\Basic as PassportBasic;
-use FlyDevLabs\ApiAuthClient\Authn\Sanctum\Basic as SanctumBasic;
-use FlyDevLabs\ApiAuthClient\Authn\Sanctum\Cert;
-use FlyDevLabs\ApiAuthClient\Authn\Sanctum\TwoFA;
-use FlyDevLabs\ApiAuthClient\Enums\AuthnType;
-use FlyDevLabs\ApiAuthClient\Enums\ClientType;
+use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
+use Obman\LaravelApiAuthClient\Authn\IAuthn;
+use Obman\LaravelApiAuthClient\Authn\JWT\Basic as JwtBasic;
+use Obman\LaravelApiAuthClient\Authn\Passport\Basic as PassportBasic;
+use Obman\LaravelApiAuthClient\Authn\Sanctum\Basic as SanctumBasic;
+use Obman\LaravelApiAuthClient\Authn\Sanctum\Cert;
+use Obman\LaravelApiAuthClient\Authn\Sanctum\TwoFA;
+use Obman\LaravelApiAuthClient\Enums\AuthnType;
+use Obman\LaravelApiAuthClient\Enums\ClientType;
 
 class AuthnFactory
 {

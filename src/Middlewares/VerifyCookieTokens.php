@@ -1,6 +1,6 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Middlewares;
+namespace Obman\LaravelApiAuthClient\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;

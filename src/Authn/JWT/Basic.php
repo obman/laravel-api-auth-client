@@ -1,11 +1,11 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Authn\JWT;
+namespace Obman\LaravelApiAuthClient\Authn\JWT;
 
-use FlyDevLabs\ApiAuthClient\Authn\BaseAuthn;
-use FlyDevLabs\ApiAuthClient\DTO\AuthnPayload;
-use FlyDevLabs\ApiAuthClient\DTO\AuthnResult;
-use FlyDevLabs\ApiAuthClient\Services\TokenService;
+use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
+use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
+use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\Services\TokenService;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Facades\JWTAuth;

@@ -1,9 +1,9 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Authn\Sanctum;
+namespace Obman\LaravelApiAuthClient\Authn\Sanctum;
 
-use FlyDevLabs\ApiAuthClient\Authn\BaseAuthn;
-use FlyDevLabs\ApiAuthClient\DTO\AuthUserDto;
+use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
+use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
 use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Hash;

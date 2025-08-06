@@ -1,6 +1,6 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Enums;
+namespace Obman\LaravelApiAuthClient\Enums;
 
 enum ThrottleKeyType: string
 {

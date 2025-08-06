@@ -1,8 +1,8 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient\Middlewares;
+namespace Obman\LaravelApiAuthClient\Middlewares;
 
-use FlyDevLabs\ApiAuthClient\Enums\ThrottleKeyType;
+use Obman\LaravelApiAuthClient\Enums\ThrottleKeyType;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;

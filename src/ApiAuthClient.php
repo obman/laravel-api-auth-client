@@ -1,14 +1,14 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient;
+namespace Obman\LaravelApiAuthClient;
 
-use FlyDevLabs\ApiAuthClient\DTO\AuthnPayload;
-use FlyDevLabs\ApiAuthClient\DTO\AuthnResult;
-use FlyDevLabs\ApiAuthClient\DTO\AuthUserDto;
-use FlyDevLabs\ApiAuthClient\Authn\IAuthn;
-use FlyDevLabs\ApiAuthClient\Enums\AuthnType;
-use FlyDevLabs\ApiAuthClient\Enums\ClientType;
-use FlyDevLabs\ApiAuthClient\Factories\AuthnFactory;
+use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
+use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
+use Obman\LaravelApiAuthClient\Authn\IAuthn;
+use Obman\LaravelApiAuthClient\Enums\AuthnType;
+use Obman\LaravelApiAuthClient\Enums\ClientType;
+use Obman\LaravelApiAuthClient\Factories\AuthnFactory;
 
 class ApiAuthClient
 {

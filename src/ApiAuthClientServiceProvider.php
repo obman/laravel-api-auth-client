@@ -1,9 +1,9 @@
 <?php
 
-namespace FlyDevLabs\ApiAuthClient;
+namespace Obman\LaravelApiAuthClient;
 
-use FlyDevLabs\ApiAuthClient\Middlewares\LoginThrottle;
-use FlyDevLabs\ApiAuthClient\Middlewares\VerifyCookieTokens;
+use Obman\LaravelApiAuthClient\Middlewares\LoginThrottle;
+use Obman\LaravelApiAuthClient\Middlewares\VerifyCookieTokens;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
