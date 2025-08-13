@@ -57,7 +57,7 @@ class TokenService
             $tokenSettings->expiration,
             $cookieConf['path'],
             $cookieConf['domain'],
-            false
+            $cookieConf['production']
         );
     }
 
@@ -69,6 +69,14 @@ class TokenService
         $cookieConf = $this->config['cookie'];
         $path = $cookieConf['path'];
         $domain = $cookieConf['domain'];
-        return $this->cookieGenerator->generate($tokenSettings->label, $token, $tokenSettings->expiration, $path, $domain, false);
+        return $this->cookieGenerator->generate($tokenSettings->label, $token, $tokenSettings->expiration, $path, $domain, $cookieConf['production']);
+    }
+
+    public function getEmptyRefreshToken(): Cookie
+    {
+        $config = $this->config['token']['refresh'];
+        $tokenSettings = new TokenSettings($config['label'], $config['expiration']);
+        $cookieConf = $this->config['cookie'];
+        return $this->cookieGenerator->generate($tokenSettings->label, '', -1, $cookieConf['path'], '', $cookieConf['production']);
     }
 }

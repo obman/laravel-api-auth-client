@@ -2,21 +2,26 @@
 
 namespace Obman\LaravelApiAuthClient;
 
+use Illuminate\Contracts\Auth\Authenticatable;
+use Obman\LaravelApiAuthClient\Authn\IAuthn;
 use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
 use Obman\LaravelApiAuthClient\DTO\AuthnResult;
 use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
-use Obman\LaravelApiAuthClient\Authn\IAuthn;
 use Obman\LaravelApiAuthClient\Enums\AuthnType;
 use Obman\LaravelApiAuthClient\Enums\ClientType;
 use Obman\LaravelApiAuthClient\Factories\AuthnFactory;
+use Obman\LaravelApiAuthClient\Factories\LogoutFactory;
+use Obman\LaravelApiAuthClient\Logout\Contracts\ILogout;
 
 class ApiAuthClient
 {
     private IAuthn $authn;
+    private ILogout $logout;
 
     public function __construct(AuthnType $authnType, ?ClientType $clientType = null)
     {
         $this->authn = AuthnFactory::make($authnType, $clientType);
+        $this->logout = LogoutFactory::make($authnType, $clientType);
     }
 
     protected function getAuthnPayload(array $tokens, array $credentials = []): AuthnPayload
@@ -35,5 +40,15 @@ class ApiAuthClient
     {
         $payload = $this->getAuthnPayload($tokens, $credentials);
         return $this->authn->refresh($payload);
+    }
+
+    public function logout(?Authenticatable $user = null): AuthnResult
+    {
+        return $this->logout->destroyToken($user);
+    }
+
+    public function logoutOauth(Authenticatable $user): void
+    {
+        //$this->logout->destr
     }
 }
