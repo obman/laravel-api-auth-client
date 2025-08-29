@@ -15,6 +15,7 @@ class Basic implements ILogout, ILogoutOauth
     public function __construct() {
         $this->config = config('apiauthclient.token');
     }
+
     public function destroyToken(?Authenticatable $user): AuthnResult
     {
         if (!$user) {

@@ -12,11 +12,12 @@ use Obman\LaravelApiAuthClient\Enums\ClientType;
 use Obman\LaravelApiAuthClient\Factories\AuthnFactory;
 use Obman\LaravelApiAuthClient\Factories\LogoutFactory;
 use Obman\LaravelApiAuthClient\Logout\Contracts\ILogout;
+use Obman\LaravelApiAuthClient\Logout\Contracts\ILogoutOauth;
 
 class ApiAuthClient
 {
     private IAuthn $authn;
-    private ILogout $logout;
+    private ILogout|ILogoutOauth $logout;
 
     public function __construct(AuthnType $authnType, ?ClientType $clientType = null)
     {
@@ -47,8 +48,8 @@ class ApiAuthClient
         return $this->logout->destroyToken($user);
     }
 
-    public function logoutOauth(Authenticatable $user): void
+    public function logoutOauth(Authenticatable $user): AuthnResult
     {
-        //$this->logout->destr
+        return $this->logout->destroyTokens($user);
     }
 }

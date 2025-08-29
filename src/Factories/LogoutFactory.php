@@ -5,12 +5,14 @@ namespace Obman\LaravelApiAuthClient\Factories;
 use Obman\LaravelApiAuthClient\Enums\AuthnType;
 use Obman\LaravelApiAuthClient\Enums\ClientType;
 use Obman\LaravelApiAuthClient\Logout\Contracts\ILogout;
+use Obman\LaravelApiAuthClient\Logout\Contracts\ILogoutOauth;
 use Obman\LaravelApiAuthClient\Logout\JWT\Basic as JwtBasic;
 use Obman\LaravelApiAuthClient\Logout\Sanctum\Basic as SanctumBasic;
+use Obman\LaravelApiAuthClient\Logout\Passport\Basic as PassportBasic;
 
 class LogoutFactory extends BaseAuthFactory
 {
-    public static function make(AuthnType $type, ?ClientType $clientType = null): ILogout
+    public static function make(AuthnType $type, ?ClientType $clientType = null): ILogout|ILogoutOauth
     {
         $clientType ??= self::tryDetectingType();
 
@@ -27,9 +29,9 @@ class LogoutFactory extends BaseAuthFactory
                 //AuthnType::TWO_FACTOR => new TwoFA(),
                 //AuthnType::CERTIFICATE => new Cert()
             },
-            /*ClientType::PASSPORT => match ($type) {
+            ClientType::PASSPORT => match ($type) {
                 AuthnType::BASIC => new PassportBasic()
-            },*/
+            },
         };
     }
 }
