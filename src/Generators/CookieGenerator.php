@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 class CookieGenerator
 {
-    public function generate(string $name, string $token, int $expiration, string $path, string $domain, bool $isProduction): Cookie
+    public function generate(string $name, string $token, int $expiration, string $path, string|bool $domain, bool $isProduction, bool $httpOnly = false): Cookie
     {
         return cookie(
             $name,
@@ -15,9 +15,9 @@ class CookieGenerator
             $path,
             $domain,
             $isProduction,
-            true,
+            $httpOnly,
             false,
-            $isProduction ? 'strict' : 'lax'
+            $isProduction ? 'strict' : 'lax',
         );
     }
 }

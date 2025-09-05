@@ -23,7 +23,8 @@ class Basic extends BaseAuthn
 
         return new AuthnResult(
             bearer: $payload->tokens['access_token'],
-            expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in'])->timestamp,
+            expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in']),
+            maxAge: $payload->tokens['expires_in'],
             refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
             csrf: $tokenService->getCsrfCookieToken(),
             user: $user
@@ -37,7 +38,8 @@ class Basic extends BaseAuthn
 
         return new AuthnResult(
             bearer: $payload->tokens['access_token'],
-            expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in'])->timestamp,
+            expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in']),
+            maxAge: $payload->tokens['expires_in'],
             refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
             csrf: $tokenService->getCsrfCookieToken(),
             user: null

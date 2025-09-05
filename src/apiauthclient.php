@@ -4,11 +4,11 @@ return [
     'limiter_key_label' => env('API_AUTH_CLIENT_LIMITER_KEY', 'limiterKey'),
     'token' => [
         'access' => [
-            'label' => env('API_AUTH_CLIENT_ACCESS_TOKEN_LABEL', 'access_token_'),
+            'label' => env('API_AUTH_CLIENT_ACCESS_TOKEN_LABEL', 'access:token'),
             'expiration' => env('API_AUTH_CLIENT_ACCESS_TOKEN_EXPIRATION', 10)
         ],
         'refresh' => [
-            'label' => env('API_AUTH_CLIENT_REFRESH_TOKEN_LABEL', 'refresh_token_'),
+            'label' => env('API_AUTH_CLIENT_REFRESH_TOKEN_LABEL', 'refresh:token'),
             'expiration' => env('API_AUTH_CLIENT_REFRESH_TOKEN_EXPIRATION', 10080)
         ],
         'csrf' => [

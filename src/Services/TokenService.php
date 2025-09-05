@@ -57,7 +57,8 @@ class TokenService
             $tokenSettings->expiration,
             $cookieConf['path'],
             $cookieConf['domain'],
-            $cookieConf['production']
+            $cookieConf['production'],
+            true
         );
     }
 
