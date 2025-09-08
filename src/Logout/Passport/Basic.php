@@ -22,7 +22,8 @@ class Basic implements ILogoutOauth
 
         return new AuthnResult(
             bearer: '',
-            expiresIn: 0,
+            expiresIn: null,
+            maxAge: 0,
             refresh: $tokenService->getEmptyRefreshToken(),
             csrf: $tokenService->getCsrfCookieToken()
         );

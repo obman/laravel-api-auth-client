@@ -3,23 +3,21 @@
 namespace Obman\LaravelApiAuthClient\Authn\Passport;
 
 use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
-use Obman\LaravelApiAuthClient\Exceptions\CredentialsMissingException;
 use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
 use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\Exceptions\UserMissingException;
 use Obman\LaravelApiAuthClient\Services\TokenService;
-use App\Models\User;
 
 class Basic extends BaseAuthn
 {
     public function authenticate(AuthnPayload $payload): AuthnResult
     {
         if (empty($payload->user)) {
-            throw new CredentialsMissingException();
+            throw new UserMissingException();
         }
 
         $this->clearRateLimitingAttempts();
-        $user = User::where('email', $payload->user->email())->first();
-        $tokenService = new TokenService($user);
+        $tokenService = new TokenService($payload->user);
 
         return new AuthnResult(
             bearer: $payload->tokens['access_token'],
@@ -27,7 +25,7 @@ class Basic extends BaseAuthn
             maxAge: $payload->tokens['expires_in'],
             refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
             csrf: $tokenService->getCsrfCookieToken(),
-            user: $user
+            user: $payload->user
         );
     }
 

@@ -25,15 +25,23 @@ class ApiAuthClient
         $this->logout = LogoutFactory::make($authnType, $clientType);
     }
 
-    protected function getAuthnPayload(array $tokens, array $credentials = []): AuthnPayload
+    protected function getAuthnPayload(array $tokens, ?array $credentials = [], mixed $user = null): AuthnPayload
     {
-        $dto = !empty($credentials) ? new AuthUserDto($credentials) : null;
+        if (!empty($credentials)) $dto = new AuthUserDto($credentials);
+        elseif (!empty($user)) $dto = $user;
+        else $dto = null;
         return new AuthnPayload($tokens, $dto);
     }
 
-    public function authenticate(array $tokens = [], array $credentials = []): AuthnResult
+    public function authenticateWithCredentials(array $tokens = [], array $credentials = []): AuthnResult
     {
-        $payload = $this->getAuthnPayload($tokens, $credentials);
+        $payload = $this->getAuthnPayload($tokens, credentials: $credentials);
+        return $this->authn->authenticate($payload);
+    }
+
+    public function authenticateWithUser(array $tokens = [], mixed $user = null): AuthnResult
+    {
+        $payload = $this->getAuthnPayload($tokens, user: $user);
         return $this->authn->authenticate($payload);
     }
 
