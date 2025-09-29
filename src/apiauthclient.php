@@ -12,6 +12,7 @@ return [
             'expiration' => env('API_AUTH_CLIENT_REFRESH_TOKEN_EXPIRATION', 10080)
         ],
         'csrf' => [
+            'enable' => env('API_AUTH_CLIENT_CSRF_TOKEN_ENABLE', false),
             'label' => env('API_AUTH_CLIENT_CSRF_TOKEN_LABEL', 'XSRF-TOKEN'),
             'expiration' => env('API_AUTH_CLIENT_CSRF_TOKEN_EXPIRATION', 10080)
         ]

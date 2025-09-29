@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\RateLimiter;
 
 abstract class BaseAuthn implements IAuthn
 {
+    private array $config;
+
+    public function __construct()
+    {
+        $this->config = config('apiauthclient');
+    }
+
+    protected function isCsrfEnabled(): bool
+    {
+        return $this->config['token']['csrf']['enable'];
+    }
+
     abstract public function authenticate(AuthnPayload $payload): AuthnResult;
     abstract public function refresh(AuthnPayload $payload): AuthnResult;
 
