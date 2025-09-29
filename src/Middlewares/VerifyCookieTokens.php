@@ -16,15 +16,19 @@ class VerifyCookieTokens
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $headerXSRF = $request->header('X-XSRF-TOKEN');
-        $cookieXSRF = $request->cookie('XSRF-TOKEN');
+        $authConf = config('apiauthclient.token.refresh.label');
+        $refreshTokenLabel = $authConf['refresh']['label'];
+        if ($authConf['csrf']['enable']) {
+            $headerXSRF = $request->header('X-XSRF-TOKEN');
+            $cookieXSRF = $request->cookie('XSRF-TOKEN');
 
-        if (!$headerXSRF || !$cookieXSRF || $headerXSRF !== $cookieXSRF) {
-            $clearCookie = Cookie::forget(REFRESH_TOKEN_LABEL);
-            return response(['message' => 'Invalid CSRF token'], 403)->withCookie($clearCookie);
+            if (!$headerXSRF || !$cookieXSRF || $headerXSRF !== $cookieXSRF) {
+                $clearCookie = Cookie::forget($refreshTokenLabel);
+                return response(['message' => 'Invalid CSRF token'], 403)->withCookie($clearCookie);
+            }
         }
 
-        $refreshToken = $request->cookie(REFRESH_TOKEN_LABEL);
+        $refreshToken = $request->cookie($refreshTokenLabel);
         if (!$refreshToken) {
             return response(['message' => 'Missing refresh token'], 401);
         }

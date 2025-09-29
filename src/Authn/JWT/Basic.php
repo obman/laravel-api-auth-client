@@ -32,9 +32,9 @@ class Basic extends BaseAuthn
 
         return new AuthnResult(
             bearer: $token,
-            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration'))->timestamp,
+            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration')),
             refresh: $tokenService->getRefreshCookieToken(JWTAuth::fromUser($user)),
-            csrf: $tokenService->getCsrfCookieToken(),
+            csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null,
             user: $user
         );
     }
@@ -68,9 +68,9 @@ class Basic extends BaseAuthn
         JWTAuth::setToken($oldRefreshToken)->invalidate();
         return new AuthnResult(
             bearer: $token,
-            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration'))->timestamp,
+            expiresIn: now('UTC')->addSeconds(config('apiauthclient.token.access.expiration')),
             refresh: $tokenService->getRefreshCookieToken($refreshToken),
-            csrf: $tokenService->getCsrfCookieToken(),
+            csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null,
             user: null
         );
     }
