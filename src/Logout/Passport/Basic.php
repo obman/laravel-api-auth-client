@@ -5,10 +5,11 @@ namespace Obman\LaravelApiAuthClient\Logout\Passport;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Passport\Token;
 use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\Logout\BaseLogout;
 use Obman\LaravelApiAuthClient\Logout\Contracts\ILogoutOauth;
 use Obman\LaravelApiAuthClient\Services\TokenService;
 
-class Basic implements ILogoutOauth
+class Basic extends BaseLogout implements ILogoutOauth
 {
     public function destroyTokens(Authenticatable $user): AuthnResult
     {
@@ -25,7 +26,7 @@ class Basic implements ILogoutOauth
             expiresIn: null,
             maxAge: 0,
             refresh: $tokenService->getEmptyRefreshToken(),
-            csrf: $tokenService->getCsrfCookieToken()
+            csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null
         );
     }
 }

@@ -4,11 +4,12 @@ namespace Obman\LaravelApiAuthClient\Logout\Sanctum;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Obman\LaravelApiAuthClient\DTO\AuthnResult;
+use Obman\LaravelApiAuthClient\Logout\BaseLogout;
 use Obman\LaravelApiAuthClient\Logout\Contracts\ILogout;
 use Obman\LaravelApiAuthClient\Logout\Contracts\ILogoutOauth;
 use Obman\LaravelApiAuthClient\Services\TokenService;
 
-class Basic implements ILogout, ILogoutOauth
+class Basic extends BaseLogout implements ILogout, ILogoutOauth
 {
     private array $config;
 
@@ -26,9 +27,9 @@ class Basic implements ILogout, ILogoutOauth
         $tokenService = new TokenService($user);
         return new AuthnResult(
             bearer: '',
-            expiresIn: 0,
+            expiresIn: null,
             refresh: $tokenService->getEmptyRefreshToken(),
-            csrf: $tokenService->getCsrfCookieToken()
+            csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null
         );
     }
 
@@ -44,9 +45,9 @@ class Basic implements ILogout, ILogoutOauth
 
         return new AuthnResult(
             bearer: '',
-            expiresIn: 0,
+            expiresIn: null,
             refresh: $tokenService->getEmptyRefreshToken(),
-            csrf: $tokenService->getCsrfCookieToken()
+            csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null
         );
     }
 }
