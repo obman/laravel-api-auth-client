@@ -5,17 +5,17 @@ return [
     'token' => [
         'access' => [
             'label' => env('API_AUTH_CLIENT_ACCESS_TOKEN_LABEL', 'access:token'),
-            'expiration' => env('API_AUTH_CLIENT_ACCESS_TOKEN_EXPIRATION', 10)
+            'expiration' => env('API_AUTH_CLIENT_ACCESS_TOKEN_EXPIRATION_MINUTES', 10)
         ],
         'refresh' => [
             'label' => env('API_AUTH_CLIENT_REFRESH_TOKEN_LABEL', 'refresh:token'),
-            'expiration' => env('API_AUTH_CLIENT_REFRESH_TOKEN_EXPIRATION', 10080)
+            'expiration' => env('API_AUTH_CLIENT_REFRESH_TOKEN_EXPIRATION_MINUTES', 10080)
         ],
         'csrf' => [
             'enable' => env('API_AUTH_CLIENT_CSRF_TOKEN_ENABLE', false),
             'label' => env('API_AUTH_CLIENT_CSRF_TOKEN_LABEL', 'XSRF-TOKEN'),
             'header_label' => env('API_AUTH_CLIENT_CSRF_HEADER_LABEL', 'X-XSRF-TOKEN'),
-            'expiration' => env('API_AUTH_CLIENT_CSRF_TOKEN_EXPIRATION', 10080)
+            'expiration' => env('API_AUTH_CLIENT_CSRF_TOKEN_EXPIRATION_MINUTES', 10080)
         ]
     ],
     'cookie' => [
