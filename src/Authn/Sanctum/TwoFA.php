@@ -4,7 +4,7 @@ namespace Obman\LaravelApiAuthClient\Authn\Sanctum;
 
 use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
 use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;

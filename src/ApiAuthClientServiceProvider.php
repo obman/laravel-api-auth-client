@@ -3,7 +3,7 @@
 namespace Obman\LaravelApiAuthClient;
 
 use Laravel\Sanctum\PersonalAccessToken;
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Obman\LaravelApiAuthClient\Enums\TokenType;
@@ -36,7 +36,7 @@ class ApiAuthClientServiceProvider extends ServiceProvider
         /**
          * Custom auth guard for refresh tokens
          */
-        Auth::viaRequest('sanctum-refresh-token', function (Request $request): User|null {
+        Auth::viaRequest('sanctum-refresh-token', function (Request $request): Authenticatable|null {
             $headerXSRF = $request->header('X-XSRF-TOKEN');
             $cookieXSRF = $request->cookie('XSRF-TOKEN');
 

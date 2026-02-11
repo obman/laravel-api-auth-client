@@ -3,7 +3,7 @@
 namespace Obman\LaravelApiAuthClient\Authn\Sanctum;
 
 use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable as User;
 
 class Cert extends BaseAuthn
 {
