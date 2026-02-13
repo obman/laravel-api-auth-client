@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'default_authn_type' => env('API_AUTH_CLIENT_DEFAULT_AUTHN_TYPE'),
+    'default_client_type' => env('API_AUTH_CLIENT_DEFAULT_CLIENT_TYPE'),
     'limiter_key_label' => env('API_AUTH_CLIENT_LIMITER_KEY', 'limiterKey'),
     'token' => [
         'access' => [

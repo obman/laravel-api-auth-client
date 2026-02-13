@@ -6,18 +6,28 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Obman\LaravelApiAuthClient\Enums\TokenType;
 use Obman\LaravelApiAuthClient\Middlewares\LoginThrottle;
 use Obman\LaravelApiAuthClient\Middlewares\VerifyCookieTokens;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Obman\LaravelApiAuthClient\Enums\AuthnType;
+use Obman\LaravelApiAuthClient\Enums\ClientType;
+use Obman\LaravelApiAuthClient\Factories\ApiAuthClientFactory;
 
 class ApiAuthClientServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/apiauthclient.php', 'apiauthclient');
+
+        $this->app->singleton(ApiAuthClientFactory::class);
+        $this->app->singleton(ApiAuthClient::class, function () {
+            $authnType = AuthnType::tryFrom(config('apiauthclient.default_authn_type')) ?? AuthnType::BASIC;
+            $clientType = ClientType::tryFrom(config('apiauthclient.default_client_type')) ?? ClientType::PASSPORT;
+
+            return new ApiAuthClient($authnType, $clientType);
+        });
     }
 
     /**
