@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 class TokenService
 {
     private array $config;
+    private string $identifierColumn;
+
     private TokenGenerator $tokenGenerator;
     private CookieGenerator $cookieGenerator;
 
@@ -21,6 +23,8 @@ class TokenService
     )
     {
         $this->config = config('apiauthclient');
+        $this->identifierColumn = $this->config['email_identifier_column'];
+
         $this->tokenGenerator = new TokenGenerator();
         $this->cookieGenerator = new CookieGenerator();
     }
@@ -28,7 +32,7 @@ class TokenService
     public function getAccessToken(): string
     {
         $accessTokenConf = $this->config['token']['access'];
-        $name = $accessTokenConf['label'] . $this->user->email;
+        $name = $accessTokenConf['label'] . $this->user->{$this->identifierColumn};
         $expiration = now()->addMinutes((int) $accessTokenConf['expiration']);
         $abilities = [TokenType::ACCESS_TOKEN];
         return $this->tokenGenerator->generate($this->user, $name, $expiration, $abilities);
@@ -42,7 +46,7 @@ class TokenService
         if ($token !== null) {
             $cookieToken = $token;
         } elseif ($this->user !== null) {
-            $tokenName = $tokenSettings->label . $this->user->email;
+            $tokenName = $tokenSettings->label . $this->user->{$this->identifierColumn};
             $tokenExpiration = now()->addMinutes($tokenSettings->expiration);
             $abilities = [TokenType::REFRESH_TOKEN];
             $cookieToken = $this->tokenGenerator->generate($this->user, $tokenName, $tokenExpiration, $abilities);

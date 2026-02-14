@@ -13,10 +13,10 @@ class Basic extends BaseAuthn
     private function getAuthResult(AuthnPayload $payload, TokenService $tokenService, bool $returnUser = false)
     {
         return new AuthnResult(
-            bearer: $payload->tokens['access_token'],
-            expiresIn: now('UTC')->addSeconds($payload->tokens['expires_in']),
-            maxAge: $payload->tokens['expires_in'],
-            refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
+            bearer: $payload->tokens->accessToken,
+            expiresIn: now('UTC')->addSeconds($payload->tokens->expiresIn),
+            maxAge: $payload->tokens->expiresIn,
+            refresh: $tokenService->getRefreshCookieToken($payload->tokens->refreshToken),
             csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null,
             user: $returnUser ? $payload->user : null
         );

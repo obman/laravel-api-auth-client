@@ -4,7 +4,6 @@ namespace Obman\LaravelApiAuthClient\Authn;
 
 use Obman\LaravelApiAuthClient\DTO\AuthnPayload;
 use Obman\LaravelApiAuthClient\DTO\AuthnResult;
-use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
 use Illuminate\Support\Facades\RateLimiter;
 
 abstract class BaseAuthn implements IAuthn

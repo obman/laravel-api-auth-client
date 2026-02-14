@@ -3,9 +3,9 @@
 namespace Obman\LaravelApiAuthClient\Authn\Sanctum;
 
 use Obman\LaravelApiAuthClient\Authn\BaseAuthn;
-use Obman\LaravelApiAuthClient\DTO\AuthUserDto;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Auth\Events\Login;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use RobThree\Auth\Providers\Qr\BaconQrCodeProvider;
@@ -19,9 +19,11 @@ class TwoFA extends BaseAuthn
     /**
      * @throws TwoFactorAuthException
      */
-    public function __construct(AuthUserDto $authUserDto)
+    public function __construct(
+        private Authenticatable $user
+    )
     {
-        parent::__construct($authUserDto);
+        parent::__construct();
         $this->auth = new TwoFactorAuth(new BaconQrCodeProvider());
     }
 
@@ -30,15 +32,14 @@ class TwoFA extends BaseAuthn
      */
     public function authenticate(array $tokens = []): mixed
     {
-        $user = User::where('email', $this->authUserDto->email)->firstOrFail();
-        if (!$user || !Hash::check($this->authUserDto->password, $user->password)) {
+        if (!$user || !Hash::check($this->user->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
 
         $this->clearRateLimitingAttempts();
-        event(new Login(auth()->getDefaultDriver(), $user, $this->authUserDto->rememberMe));
+        event(new Login(auth()->getDefaultDriver(), $user, $this->user->rememberMe));
 
         return $user;
         /*$token = new TokenService($user);

@@ -14,9 +14,12 @@ class Basic extends BaseAuthn
 {
     public function authenticate(AuthnPayload $payload): AuthnResult
     {
+        $emailColumn = config('apiauthclient.email_identifier_column');
+        $passwdColumn = config('apiauthclient.password_identifier_column');
+        $rememberColumn = config('rememberme.password_identifier_column');
         $token = auth()->attempt([
-            'email' => $payload->user->email(),
-            'password' => $payload->user->password()
+            'email' => $payload->user->{$emailColumn},
+            'password' => $payload->user->{$passwdColumn}
         ]);
         if (!$token) {
             throw ValidationException::withMessages([
@@ -28,7 +31,7 @@ class Basic extends BaseAuthn
 
         $user = auth()->user();
         $tokenService = new TokenService($user);
-        event(new Login(auth()->getDefaultDriver(), $user, $payload->user->rememberMe()));
+        event(new Login(auth()->getDefaultDriver(), $user, $payload->user->{$rememberColumn}));
 
         return new AuthnResult(
             bearer: $token,
@@ -51,7 +54,7 @@ class Basic extends BaseAuthn
      */
     public function refresh(AuthnPayload $payload): AuthnResult
     {
-        $oldRefreshToken = $payload->tokens['refresh_token'];
+        $oldRefreshToken = $payload->tokens->refreshToken;
         $tokenPayload = JWTAuth::setToken($oldRefreshToken)->getPayload();
         if ($tokenPayload->get('type') !== 'refresh') {
             throw new \Exception('Invalid token type');

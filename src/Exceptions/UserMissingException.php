@@ -6,5 +6,5 @@ use Exception;
 
 class UserMissingException extends Exception
 {
-    protected $message = 'User is missing or are incorrect.';
+    protected $message = 'User is missing or is incorrect type.';
 }

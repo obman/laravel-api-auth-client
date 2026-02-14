@@ -11,17 +11,30 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Obman\LaravelApiAuthClient\Exceptions\UserMissingException;
 
 class Basic extends BaseAuthn
 {
-    private function getAuthResult(TokenService $tokenService, ?Authenticatable $user = null): AuthnResult
+    private function canProcced(AuthnPayload $payload): bool
+    {
+        if (empty($payload->user)) {
+            throw new UserMissingException();
+        }
+        if (empty($payload->credentials)) {
+            throw new CredentialsMissingException();
+        }
+
+        return true;
+    }
+
+    private function getAuthResult(AuthnPayload $payload, TokenService $tokenService, ?Authenticatable $user = null): AuthnResult
     {
         $expiration = (int) config('apiauthclient.token.access.expiration');
         return new AuthnResult(
             bearer: $tokenService->getAccessToken(),
             expiresIn: now('UTC')->addSeconds($expiration),
             maxAge: $expiration,
-            refresh: $tokenService->getRefreshCookieToken($payload->tokens['refresh_token']),
+            refresh: $tokenService->getRefreshCookieToken($payload->tokens->refreshToken),
             csrf: $this->isCsrfEnabled() ? $tokenService->getCsrfCookieToken() : null,
             user: $user
         );
@@ -29,34 +42,30 @@ class Basic extends BaseAuthn
 
     public function authenticate(AuthnPayload $payload): AuthnResult
     {
-        if (empty($payload->user)) {
-            throw new CredentialsMissingException();
-        }
+        $this->canProcced($payload);
 
-        $user = Authenticatable::where('email', $payload->user->email())->first();
-        if (!$user || ! Hash::check($payload->user->password(), $user->password)) {
+        $passwdColumn = config('apiauthclient.password_identifier_column');
+        $rememberColumn = config('rememberme.password_identifier_column');
+        if (!$payload->user || ! Hash::check($payload->user->{$passwdColumn}, $payload->credentials->password)) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
 
         $this->clearRateLimitingAttempts();
-        event(new Login(auth()->getDefaultDriver(), $user, $payload->user->rememberMe()));
+        event(new Login(auth()->getDefaultDriver(), $payload->user, $payload->credentials->{$rememberColumn}));
 
-        $tokenService = new TokenService($user);
-        return $this->getAuthResult($tokenService, $user);
+        $tokenService = new TokenService($payload->user);
+        return $this->getAuthResult($tokenService, $payload->user);
     }
 
     public function refresh(AuthnPayload $payload): AuthnResult
     {
-        if (empty($payload->user)) {
-            throw new CredentialsMissingException();
-        }
+        $this->canProcced($payload);
 
         $this->clearRateLimitingAttempts();
-        $user = Authenticatable::where('email', $payload->user->email())->first();
         // TODO: add event for refresh token
-        $tokenService = new TokenService($user);
+        $tokenService = new TokenService($payload->user);
         return $this->getAuthResult($tokenService);
     }
 }
