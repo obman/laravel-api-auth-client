@@ -33,7 +33,7 @@ return [
 
     'cookie' => [
         'path' => env('API_AUTH_CLIENT_COOKIE_PATH', '/'),
-        'domain' => env('API_AUTH_CLIENT_COOKIE_DOMAIN', 'localhost'),
+        'domain' => env('API_AUTH_CLIENT_COOKIE_DOMAIN', env('APP_DOMAIN', 'localhost')),
         'production' => env('API_AUTH_CLIENT_COOKIE_PRODUCTION', false)
     ]
 ];
